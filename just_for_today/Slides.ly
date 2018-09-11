@@ -1,35 +1,17 @@
 \version "2.19.49"
 
 \include "Words-and-music.ly"
+\include "../../LilypondTemplates/standard-elements.ly"
 
-#(set-global-staff-size 44)
-
-%
-% Common layout controls.
-%
-% This allows us to either use the defaults or override them.  We try to use
-% the same local variable names in the body in order to maintain as common a
-% template as possible.
-%
-
-%
-% Lyric controls
-%
-lyricMinimumDistance = \defaultSlideMusicLyricMinimumDistance
-lyricFontSize = \defaultSlideMusicLyricFontSize
-hyphenThickness = \defaultSlideMusicHyphenThickness
-hyphenLength = \defaultSlideMusicHyphenLength
-
-%
-% Staff controls
-%
-staffLineThickness = \defaultSlideMusicStaffLineThickness
-noteHeadFontSize = \defaultSlideMusicNoteHeadFontSize
+#(ly:parser-define! (string->symbol "outputName")
+   (if (null? (ly:parser-lookup (string->symbol "build_dir")))
+       "Slides"
+       (string-append build_dir songNumber " - " title " - Slides")))
 
 \book {
-  \bookOutputName #(string-append build_dir songNumber " - " title " - Slides")
+  \bookOutputName \outputName
   \paper {
-    #(set-paper-size "arch a" 'landscape )
+    #(set-paper-size "arch alandscape" )
 
     %
     % Turn on to see spacing details while you tweek the layout
@@ -85,185 +67,132 @@ noteHeadFontSize = \defaultSlideMusicNoteHeadFontSize
           \bold
           \wordwrap-field #'header:title
         }
-        \vspace #2
-        \override #'(line-width . 60)
-        \center-column {
-          \abs-fontsize #24
-          \italic
-          \wordwrap-field #'header:scripture
-        }
+        \SlideScripture
       }
     }
     scoreTitleMarkup = ##f
+    #(layout-set-staff-size 44)
   }
   \pageBreak
 
   \score {
     <<
       \override Score.BarNumber.break-visibility = ##(#f #f #f)
-      \context Staff = upper <<
-        \context Voice = sopranos {
-          \voiceOne {
+      \context Staff = upper \with { printPartCombineTexts = ##f } <<
+        \partcombine
+          {
             \global
             \keepWithTag #'(usePartials verseOneRhythms) \sopranoVerse
           }
-        }
-        \context Voice = altos {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'(usePartials verseOneRhythms) \altoVerse
           }
-        }
         \context NullVoice = slideMusicVerseBreaks {
           \global
           \slideMusicVerseBreaks
         }
+        \context NullVoice = alignVoice {
+          \global
+          \keepWithTag #'(usePartials verseOneRhythms) \sopranoVerse
+        }
       >>
-      \new Lyrics \lyricsto "sopranos" {
+      \new Lyrics \lyricsto "alignVoice" {
         \huge \verseOneLyrics
       }
-      \context Staff = lower <<
+      \context Staff = lower \with { printPartCombineTexts = ##f } <<
         \clef bass
-        \context Voice = tenors {
-          \voiceOne {
+        \partcombine
+          {
             \global
             \keepWithTag #'(usePartials verseOneRhythms) \tenorVerse
           }
-        }
-        \context Voice = basses {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'(usePartials verseOneRhythms) \bassVerse
           }
-        }
       >>
     >>
-    \layout {
-      \context {
-        \Lyrics
-        \override LyricSpace.minimum-distance = \lyricMinimumDistance
-        \override LyricText.font-size = \lyricFontSize
-        \override LyricText.self-alignment-X = #CENTER
-        \override LyricHyphen.thickness = \hyphenThickness
-        \override LyricHyphen.length = \hyphenLength
-      }
-      \context {
-        \Staff
-        \override StaffSymbol.thickness = \staffLineThickness
-        \override NoteHead.font-size = \noteHeadFontSize
-      }
-    }
+    \SlideLayout
   }
   \score {
     <<
       \override Score.BarNumber.break-visibility = ##(#f #f #f)
-      \context Staff = upper <<
-        \context Voice = sopranos {
-          \voiceOne {
+      \context Staff = upper \with { printPartCombineTexts = ##f } <<
+        \partcombine
+          {
             \global
             \keepWithTag #'(usePartials verseTwoRhythms) \sopranoVerse
           }
-        }
-        \context Voice = altos {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'(usePartials verseTwoRhythms) \altoVerse
           }
-        }
         \context NullVoice = slideMusicBreaks {
           \global
           \slideMusicVerseBreaks
         }
-        \new Lyrics \lyricsto "sopranos" {
+        \context NullVoice = alignVoice {
+          \global
+          \keepWithTag #'(usePartials verseTwoRhythms) \sopranoVerse
+        }
+        \new Lyrics \lyricsto "alignVoice" {
           \huge \verseTwoLyrics
         }
       >>
-      \context Staff = lower <<
+      \context Staff = lower \with { printPartCombineTexts = ##f } <<
         \clef bass
-        \context Voice = tenors {
-          \voiceOne {
+        \partcombine
+          {
             \global
             \keepWithTag #'(usePartials verseTwoRhythms) \tenorVerse
           }
-        }
-        \context Voice = basses {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'(usePartials verseTwoRhythms) \bassVerse
           }
-        }
       >>
     >>
-    \layout {
-      \context {
-        \Lyrics
-        \override LyricSpace.minimum-distance = \lyricMinimumDistance
-        \override LyricText.font-size = \lyricFontSize
-        \override LyricText.self-alignment-X = #CENTER
-        \override LyricHyphen.thickness = \hyphenThickness
-        \override LyricHyphen.length = \hyphenLength
-      }
-      \context {
-        \Staff
-        \override StaffSymbol.thickness = \staffLineThickness
-        \override NoteHead.font-size = \noteHeadFontSize
-      }
-    }
+    \SlideLayout
   }
   \score {
     <<
       \override Score.BarNumber.break-visibility = ##(#f #f #f)
-      \context Staff = upper <<
-        \context Voice = sopranos {
-          \voiceOne {
+      \context Staff = upper \with { printPartCombineTexts = ##f } <<
+        \partcombine
+          {
             \global
             \keepWithTag #'usePartials \sopranoRefrain
           }
-        }
-        \context Voice = altos {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'usePartials \altoRefrain
           }
-        }
         \context NullVoice = slideMusicRefrainBreaks {
           \global
           \slideMusicRefrainBreaks
         }
-        \new Lyrics \lyricsto "sopranos" {
+        \context NullVoice = alignVoice {
+          \global
+          \keepWithTag #'usePartials \sopranoRefrain
+        }
+        \new Lyrics \lyricsto "alignVoice" {
           \huge \refrainLyrics
         }
       >>
-      \context Staff = lower <<
+      \context Staff = lower \with { printPartCombineTexts = ##f } <<
         \clef bass
-        \context Voice = tenors {
-          \voiceOne {
+        \partcombine
+          {
             \global
             \keepWithTag #'usePartials \tenorRefrain
           }
-        }
-        \context Voice = basses {
-          \voiceTwo {
+          {
             \global
             \keepWithTag #'usePartials \bassRefrain
           }
-        }
       >>
     >>
-    \layout {
-      \context {
-        \Lyrics
-        \override LyricSpace.minimum-distance = \lyricMinimumDistance
-        \override LyricText.font-size = \lyricFontSize
-        \override LyricText.self-alignment-X = #CENTER
-        \override LyricHyphen.thickness = \hyphenThickness
-        \override LyricHyphen.length = \hyphenLength
-      }
-      \context {
-        \Staff
-        \override StaffSymbol.thickness = \staffLineThickness
-        \override NoteHead.font-size = \noteHeadFontSize
-      }
-    }
+    \SlideLayout
   }
 }

@@ -1,6 +1,8 @@
 \version "2.19.49"
 
-\include "../common.ly"
+\include "../../LilypondTemplates/functions.ly"
+\include "../../LilypondTemplates/hymns.ly"
+\include "../../LilypondTemplates/hymn_settings.ly"
 
 global = {
   \key e \major
@@ -15,6 +17,7 @@ leaderHints = \markup {
   \normal-text { "E - 4 - DO" }
 }
 number_on_rhs = \just_for_today_number_rhs
+FirstPage = \just_for_today_pages
 
 #(if number_on_rhs
      (begin
@@ -38,12 +41,14 @@ number_on_rhs = \just_for_today_number_rhs
   license = #(string-append "CCLI Song #1984677, License #" ccli_license)
   arranger = "Jim Duke"
   tagline = ##f
-  scripture = #"I beseech you therefore, brethren, by the mercies of God,
-         that you present your bodies a living sacrifice, holy, acceptable to God, which
-         is your reasonable service. And do not be conformed to this world, but be transformed
-         by the renewing of your mind, that you may prove what is that good and acceptable and
-         perfect will of God.  (Romans 12:1-2 NKJV)"
 }
+
+ShowScriptureOnSheetMusic = ##t
+Scripture = #"I beseech you therefore, brethren, by the mercies of God,
+ that you present your bodies a living sacrifice, holy, acceptable to God, which
+ is your reasonable service. And do not be conformed to this world, but be transformed
+ by the renewing of your mind, that you may prove what is that good and acceptable and
+ perfect will of God.  (Romans 12:1-2 NKJV)"
 
 sheetMusicVerseBreaks = \relative c {
   \tag #'usePartials { \partial 4 }
@@ -88,22 +93,22 @@ slideMusicVerseBreaks = \relative c {
   \setSystemOffset \defaultTopSystemOffset
   s4  | \noBreak
   s1  | \noBreak
-  s2. \bar "" \break
+  s2. \bar "" \noPageBreak \break
   
   \setSystemOffset \defaultBottomSystemOffset
   s4  | \noBreak
   s1  | \noBreak
-  s2. \bar "" \break
+  s2. \bar "" \pageBreak
 
   \setSystemOffset \defaultTopSystemOffset
   s4  | \noBreak
   s1  | \noBreak
-  s2. \bar "" \break
+  s2. \bar "" \noPageBreak \break
   
   \setSystemOffset \defaultBottomSystemOffset
   s4  | \noBreak
   s1  | \noBreak
-  s2. \bar "|."
+  s2. \bar "|." \pageBreak
 }
 
 slideMusicRefrainBreaks = \relative c {
